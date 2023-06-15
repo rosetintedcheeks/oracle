@@ -1,8 +1,10 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import MainLayout from "@/Layouts/MainLayout.vue";
 
+defineOptions({
+  layout: (h, page) => h(MainLayout, {title: "Welcome"}, [page])
+});
 </script>
 
 <template>
-    <Head title="Welcome" />
 </template>
