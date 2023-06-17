@@ -23,19 +23,29 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+
+
 Route::get('/login', function() {
     return Socialite::driver('discord')->redirect();
 });
 
+Route::get('/logout', function() {
+    Auth::logout();
+    return redirect('/');
+});
+
 Route::get('/auth/callback', function () {
     $user = Socialite::driver('discord')->user();
-    $userRecord = new User;
-    $userRecord->name = $user->getName();
-    $userRecord->nickname = $user->getNickname();
-    $userRecord->avatar = $user->getAvatar();
-    $userRecord->email = $user->getEmail();
-    $userRecord->discord_id = $user->getId();
-    $userRecord->save();
+    $userRecord = User::where('discord_id', '=', $user->getId())->first();
+    if($userRecord === null) {
+        $userRecord = new User;
+        $userRecord->name = $user->getName();
+        $userRecord->nickname = $user->getNickname();
+        $userRecord->avatar = $user->getAvatar();
+        $userRecord->email = $user->getEmail();
+        $userRecord->discord_id = $user->getId();
+        $userRecord->save();
+    }
     Auth::login($userRecord, true);
     return redirect('/');
 });

@@ -1,6 +1,7 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import {Link} from '@inertiajs/vue3';
 import MenuEntry from "@/Components/MenuEntry.vue";
+import Login from "@/Components/Login.vue";
 
 </script>
 
@@ -15,9 +16,7 @@ import MenuEntry from "@/Components/MenuEntry.vue";
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <MenuEntry link-target="/" entry-name="Home" />
         </ul>
-        <div class="d-flex">
-          <a href="/login" role="button" class="btn btn-secondary">Login</a>
-        </div>
+        <Login/>
       </div>
     </div>
   </nav>
