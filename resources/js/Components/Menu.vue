@@ -15,6 +15,9 @@ import MenuEntry from "@/Components/MenuEntry.vue";
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <MenuEntry link-target="/" entry-name="Home" />
         </ul>
+        <div class="d-flex">
+          <a href="/login" role="button" class="btn btn-secondary">Login</a>
+        </div>
       </div>
     </div>
   </nav>

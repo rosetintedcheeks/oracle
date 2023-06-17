@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
@@ -23,4 +25,17 @@ Route::get('/', function () {
 
 Route::get('/login', function() {
     return Socialite::driver('discord')->redirect();
+});
+
+Route::get('/auth/callback', function () {
+    $user = Socialite::driver('discord')->user();
+    $userRecord = new User;
+    $userRecord->name = $user->getName();
+    $userRecord->nickname = $user->getNickname();
+    $userRecord->avatar = $user->getAvatar();
+    $userRecord->email = $user->getEmail();
+    $userRecord->discord_id = $user->getId();
+    $userRecord->save();
+    Auth::login($userRecord, true);
+    return redirect('/');
 });
