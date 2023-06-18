@@ -23,6 +23,9 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+Route::get('/upload', function() {
+
+});
 
 
 Route::get('/login', function() {
