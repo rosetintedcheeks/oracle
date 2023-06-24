@@ -15,6 +15,7 @@ import Login from "@/Components/Login.vue";
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <MenuEntry link-target="/" entry-name="Home" />
+          <MenuEntry link-target="/torrents" entry-name="Torrents" />
         </ul>
         <Login/>
       </div>

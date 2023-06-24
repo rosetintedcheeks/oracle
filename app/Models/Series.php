@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Series extends Model
 {
@@ -17,7 +17,7 @@ class Series extends Model
         return $this->HasMany(Link::class);
     }
 
-    public function root(): HasOne {
-        return $this->HasOne(LinkRoot::class);
+    public function root(): BelongsTo {
+        return $this->belongsTo(LinkRoot::class, 'link_root_id');
     }
 }

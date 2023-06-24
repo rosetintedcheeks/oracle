@@ -14,7 +14,9 @@ const props = defineProps({
     <header>
       <Menu/>
     </header>
-    <slot />
+    <div class="container py-3">
+      <slot />
+    </div>
   </main>
 </template>
 
