@@ -1,7 +1,9 @@
 <script setup>
-import {Link} from '@inertiajs/vue3';
+import {Link, usePage} from '@inertiajs/vue3';
 import MenuEntry from "@/Components/MenuEntry.vue";
 import Login from "@/Components/Login.vue";
+
+const page = usePage()
 
 </script>
 
@@ -15,8 +17,8 @@ import Login from "@/Components/Login.vue";
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <MenuEntry link-target="/" entry-name="Home" />
-          <MenuEntry link-target="/torrents" entry-name="Torrents" />
-          <MenuEntry link-target="/links" entry-name="Links" />
+          <MenuEntry link-target="/torrents" entry-name="Torrents" v-if="page.props.auth.user"/>
+          <MenuEntry link-target="/links" entry-name="Links"  v-if="page.props.auth.user"/>
         </ul>
         <Login/>
       </div>

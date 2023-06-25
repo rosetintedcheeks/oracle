@@ -25,29 +25,34 @@ use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
+})->name('home');
+Route::middleware('auth')->group(function () {
+    Route::get('/torrents', function() {
+        return Inertia::render('Torrents', [
+            'linkRoots' => LinkRoot::all(),
+            'series' => Series::all()
+        ]);
+    })->name('torrents.index');
+
+    Route::get('/torrents/choose', function(array $file_names) {
+        return Inertia::render('TorrentChooseFiles', [
+            'fileNames' => $file_names
+        ]);
+    })->name('torrents.choose');
+
+    Route::post('/torrents/upload', [TorrentController::class, 'uploadAction']);
+    Route::post('/torrents/choose', [TorrentController::class, 'chooseAction']);
+
+    Route::resource('/links', LinkController::class);
 });
-
-Route::get('/torrents', function() {
-    return Inertia::render('Torrents', [
-        'linkRoots' => LinkRoot::all(),
-        'series' => Series::all()
-    ]);
-})->name('torrents.index');
-
-Route::get('/torrents/choose', function(array $file_names) {
-    return Inertia::render('TorrentChooseFiles', [
-        'fileNames' => $file_names
-    ]);
-})->name('torrents.choose');
-
-Route::post('/torrents/upload', [TorrentController::class, 'uploadAction']);
-Route::post('/torrents/choose', [TorrentController::class, 'chooseAction']);
-
-Route::resource('/links', LinkController::class);
 
 Route::get('/login', function() {
+    if(config('app.env') == 'local') {
+        Auth::login(User::find(1));
+        return to_route('home');
+    }
     return Socialite::driver('discord')->redirect();
-});
+})->name('login');
 
 Route::get('/logout', function() {
     Auth::logout();
