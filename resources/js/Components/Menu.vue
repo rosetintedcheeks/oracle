@@ -6,7 +6,7 @@ import Login from "@/Components/Login.vue";
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-md bg-body-tertiary">
+  <nav class="navbar navbar-expand-md bg-body-primary">
     <div class="container-fluid">
       <Link class="navbar-brand" href="/">ORACLE</Link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,6 +15,8 @@ import Login from "@/Components/Login.vue";
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <MenuEntry link-target="/" entry-name="Home" />
+          <MenuEntry link-target="/torrents" entry-name="Torrents" />
+          <MenuEntry link-target="/links" entry-name="Links" />
         </ul>
         <Login/>
       </div>

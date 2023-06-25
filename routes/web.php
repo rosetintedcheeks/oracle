@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\LinkController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TorrentController;
+use App\Models\LinkRoot;
+use App\Models\Series;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +27,23 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+Route::get('/torrents', function() {
+    return Inertia::render('Torrents', [
+        'linkRoots' => LinkRoot::all(),
+        'series' => Series::all()
+    ]);
+})->name('torrents.index');
 
+Route::get('/torrents/choose', function(array $file_names) {
+    return Inertia::render('TorrentChooseFiles', [
+        'fileNames' => $file_names
+    ]);
+})->name('torrents.choose');
+
+Route::post('/torrents/upload', [TorrentController::class, 'uploadAction']);
+Route::post('/torrents/choose', [TorrentController::class, 'chooseAction']);
+
+Route::resource('/links', LinkController::class);
 
 Route::get('/login', function() {
     return Socialite::driver('discord')->redirect();
