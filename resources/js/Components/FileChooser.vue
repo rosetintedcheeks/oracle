@@ -29,7 +29,7 @@ const submitChoices = (event) => {
 
 <template>
   <form @submit.prevent="submitChoices">
-    <button type="submit" class="btn btn-primary">Save Choices</button>
+    <button type="submit" class="btn btn-primary mb-3">Save Choices</button>
     <div class="form-check form-switch py-3 bg-body-secondary" v-for="file in links">
       <input class="form-check-input" type="checkbox" :name="'choices' + file.id" :id="'choices' + file.id" value="1" checked/>
       <label class="form-check-label" :for="'choices' + file.id">

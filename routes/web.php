@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LinkController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TorrentController;
 use App\Models\LinkRoot;
@@ -42,6 +43,7 @@ Route::get('/torrents/choose', function(array $file_names) {
 Route::post('/torrents/upload', [TorrentController::class, 'uploadAction']);
 Route::post('/torrents/choose', [TorrentController::class, 'chooseAction']);
 
+Route::resource('/links', LinkController::class);
 
 Route::get('/login', function() {
     return Socialite::driver('discord')->redirect();

@@ -14,7 +14,7 @@ const user = computed(() => page.props.auth.user)
       <div class="ms-3">{{ user.name }}</div>
       <a href="/logout" role="button" class="btn btn-secondary ms-3">Logout</a>
     </div>
-    <a href="/login" role="button" class="btn btn-secondary" v-else>Login</a>
+    <a href="/login" role="button" class="btn btn-primary" v-else>Login</a>
   </div>
 </template>
 
