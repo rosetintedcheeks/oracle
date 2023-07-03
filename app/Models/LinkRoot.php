@@ -10,7 +10,8 @@ class LinkRoot extends Model
 {
     use HasFactory;
 
-    public function series(): HasMany {
+    public function series(): HasMany
+    {
         return $this->hasMany(Series::class);
     }
 }

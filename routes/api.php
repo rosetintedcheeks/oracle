@@ -1,10 +1,5 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,5 +10,3 @@ use Laravel\Socialite\Facades\Socialite;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-

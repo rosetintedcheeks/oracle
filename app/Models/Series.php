@@ -13,11 +13,15 @@ class Series extends Model
 
     protected $table = 'series';
 
-    public function links(): HasMany {
+    protected $fillable = ['name', 'path'];
+
+    public function links(): HasMany
+    {
         return $this->HasMany(Link::class);
     }
 
-    public function root(): BelongsTo {
+    public function root(): BelongsTo
+    {
         return $this->belongsTo(LinkRoot::class, 'link_root_id');
     }
 }
