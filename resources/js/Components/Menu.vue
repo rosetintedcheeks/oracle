@@ -18,7 +18,7 @@ const page = usePage()
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <MenuEntry link-target="/" entry-name="Home" />
           <MenuEntry link-target="/torrents" entry-name="Torrents" v-if="page.props.auth.user"/>
-          <MenuEntry link-target="/links" entry-name="Links" v-if="page.props.auth.user"/>
+          <MenuEntry link-target="/series" entry-name="Series" v-if="page.props.auth.user"/>
         </ul>
         <Login/>
       </div>

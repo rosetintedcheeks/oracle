@@ -3,26 +3,31 @@ import {computed, ref} from "vue";
 import {router} from "@inertiajs/vue3";
 
 const props = defineProps({
-  links: null
+  links: null,
+  series: null,
+  seriesId: null,
 })
 
-const linkPathUpdate = ref({}); // stores link paths that were changed and need to be uploaded
+defineEmits(['switchSeries'])
+
+const linkFileNameUpdate = ref({}); // stores link file name that were changed and need to be uploaded
 const linkDeleted = ref({}); // stores link ids that are to be deleted
 
-const updateLink = (event) => {
-  const linkId = event.target.dataset.linkId;
-  if(typeof linkPathUpdate.value[linkId] == 'undefined') {
-    toggleShowButton(linkId, true);
-  }
-  linkPathUpdate.value[linkId] = event.target.innerText;
-}
+
 
 const linkUndoButtons = ref([]); // references to the reset buttons
 const linkDeleteButtons = ref([]); // references to the reset buttons
-const linkPathItems = ref([]); // references to the elements that hold the path
+const linkFileNames = ref([]); // references to the elements that hold the link file name
+
+const updateLinks = () => {
+  const linkId = event.target.dataset.linkId;
+  if(typeof linkFileNameUpdate.value[linkId] == 'undefined') {
+    toggleShowButton(linkId, true);
+  }
+
+}
 
 const toggleShowButton = (linkId, onOff) => {
-  console.log(linkUndoButtons)
   const button = linkUndoButtons.value.find(el => el.dataset.linkId === linkId.toString())
   if(onOff) {
     button.classList.remove('d-none');
@@ -33,15 +38,19 @@ const toggleShowButton = (linkId, onOff) => {
 
 const resetButton = (id) => {
   toggleShowButton(id, false);
-  const linkPath = linkPathItems.value.find(el => el.dataset.linkId === id.toString())
+  const linkPath = linkFileNames.value.find(el => el.dataset.linkId === id.toString())
   linkPath.innerText = props.links.find(link => link.id).path;
-  delete linkPathUpdate.value[id];
+  delete linkFileNameUpdate.value[id];
 }
 
 const linksPerPage = ref(10);
 const linkPage = ref(1); // current page
 
-const pagedLinks = computed(() => props.links.slice(linksPerPage.value * (linkPage.value - 1), linksPerPage.value * linkPage.value))
+const pagedLinks = computed(() => {
+  let links = props.links;
+  links = links.slice(linksPerPage.value * (linkPage.value - 1), linksPerPage.value * linkPage.value)
+  return links;
+})
 
 const deleteLink = (id) => {
   linkDeleted.value[id] = true;
@@ -54,22 +63,22 @@ const undoDeleteLink = (id) => {
 const searchText = ref('')
 const replaceText = ref('')
 
-const searchReplaceLinkPaths = () => {
-  props.links.forEach((link) => {
-    if(link.path.match(searchText.value)) {
-      if(typeof linkPathUpdate.value[link.id] == 'undefined') linkPathUpdate.value[link.id] = link.path
-      linkPathUpdate.value[link.id].replaceAll(new RegExp(searchText.value), replaceText.value);
-    }
-  });
-  console.log(linkPathUpdate.value)
-}
-
 const saveChanges = () => {
+  for(const el of linkFileNames.value) {
+    const link = props.links.find(link => link.id == el.dataset.linkId)
+    if(typeof link == 'undefined') {
+      continue;
+    }
+    if(link.file_name !== el.innerText) {
+      linkFileNameUpdate.value[link.id] = el.innerText;
+    }
+  }
   router.post('/links', {
-    'linkPaths': linkPathUpdate.value,
-    'deletedLinks': linkDeleted.value
+    'linkFileNames': linkFileNameUpdate.value,
+    'deletedLinks': linkDeleted.value,
+    'seriesId': props.seriesId
   });
-  linkPathUpdate.value = {};
+  linkFileNameUpdate.value = {};
   linkDeleted.value = {};
   pagedLinks.value.forEach((link) => {
     toggleShowButton(link.id, false)
@@ -88,6 +97,17 @@ const saveChanges = () => {
           <input type="text" class="form-control" style="max-width: 100px" id="linkPerPage" :value="linksPerPage" @input="linksPerPage = $event.target.value >= 10 ? $event.target.value : 10" />
           <label for="linkPerPage" class="mt-2 ms-2">per page</label>
         </div>
+        <div class="col d-flex">
+          <label for="series_select" class="mt-2 ms-2">Series</label>
+          <select name="series" id="series_select" :value="seriesId" @input="$emit('switchSeries', $event.target.value)" class="form-select">
+            <option disabled value="">Please select a series</option>
+            <template v-for="show in series">
+              <option :value="show.id">
+                {{ show.name }}
+              </option>
+            </template>
+          </select>
+        </div>
       </div>
     </div>
     <div class="col-sm-6 d-flex gap-2">
@@ -102,10 +122,10 @@ const saveChanges = () => {
       <li class="list-group-item" >
         <div class="row">
           <div class="col">
-            {{ link.file_name }}
+            {{ link.path }}
           </div>
-          <div class="col" spellcheck="false" contenteditable="true" ref="linkPathItems" @input="updateLink" :data-link-id="link.id" v-if="typeof linkDeleted[link.id] == 'undefined'">
-            {{ linkPathUpdate[link.id] ?? link.path }}
+          <div class="col" spellcheck="false" contenteditable="true" ref="linkFileNames" @input="updateLinks" :data-link-id="link.id" v-if="typeof linkDeleted[link.id] == 'undefined'">
+            {{ linkFileNameUpdate[link.id] ?? link.file_name }}
           </div>
           <div class="col" v-else>
             Deleted... <a href="" @click.prevent="undoDeleteLink(link.id)">undo?</a>

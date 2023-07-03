@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\TorrentController;
 use App\Models\LinkRoot;
 use App\Models\Series;
@@ -42,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/torrents/choose', [TorrentController::class, 'chooseAction']);
 
     Route::resource('/links', LinkController::class);
+    Route::resource('/series', SeriesController::class);
 });
 
 Route::get('/login', function () {

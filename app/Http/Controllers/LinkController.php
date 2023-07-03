@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Link;
+use App\Models\Series;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,9 +14,11 @@ class LinkController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response {
+    public function index(): Response
+    {
         return Inertia::render('Links', [
-            'links' => Link::all()
+            'links' => Link::all(),
+            'series' => Series::all(),
         ]);
     }
 
@@ -24,29 +27,32 @@ class LinkController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse {
-        /* @var array $linkPaths */
-        $linkPaths = $request->input('linkPaths'); // holds paths to be updated in an array [ id => path]
+    public function store(Request $request): RedirectResponse
+    {
+        // @var array $linkFileNames
+        $linkFileNames = $request->input('linkFileNames'); // holds paths to be updated in an array [ id => path]
 
-        /* @var array $deletedLinks */
+        // @var array $deletedLinks
         $deletedLinks = $request->input('deletedLinks'); // holds ids to be deleted in an array
 
-        foreach($linkPaths as $id => $path) {
+        $seriesId = $request->input('seriesId');
+
+        foreach ($linkFileNames as $id => $fileName) {
             $link = Link::find($id);
-            $link->path = $path;
+            $link->file_name = $fileName;
             $link->save();
         }
 
         foreach ($deletedLinks as $link) {
             Link::destroy($link);
         }
-        return to_route('links.index');
+
+        return to_route('series.show', $seriesId);
     }
 
     /**
@@ -54,7 +60,6 @@ class LinkController extends Controller
      */
     public function show(string $id)
     {
-        //
     }
 
     /**
@@ -62,7 +67,6 @@ class LinkController extends Controller
      */
     public function edit(string $id)
     {
-        //
     }
 
     /**
@@ -70,7 +74,6 @@ class LinkController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
     }
 
     /**
@@ -78,6 +81,5 @@ class LinkController extends Controller
      */
     public function destroy(string $id)
     {
-        //
     }
 }

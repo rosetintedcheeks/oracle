@@ -7,12 +7,13 @@ defineOptions({
 });
 
 const props = defineProps({
-  links: null
+  links: null,
+  series: null
 })
 </script>
 
 <template>
-  <LinkList :links="links" />
+  <LinkList :links="links" :series="series" />
 </template>
 
 <style scoped lang="scss">
